@@ -145,3 +145,76 @@ fun officiate(cards, moves, goal) =
   in
     run(cards, moves, [])
   end
+
+
+(*helper function*)
+fun possible_sum(cs) = 
+  let
+    val raw_sum = sum_cards cs
+    fun get_possible_sums(xs, acc, prev) =
+      case xs of
+        [] => acc
+        | (_, Ace)::xs' => get_possible_sums(xs', (prev-10)::acc, prev-10)
+        | _::xs' => get_possible_sums(xs', acc, prev)
+  in
+    get_possible_sums(cs, [raw_sum], raw_sum)
+  end  
+
+
+     
+fun score_challenge(cs, goal) =
+  let
+    val raw_score = score(cs, goal);
+    fun get_score_by_sum(sum) = 
+      let
+        val preliminary = 
+          if sum > goal then (sum - goal)*3 else goal - sum
+      in
+        if all_same_color(cs) then preliminary div 2 else preliminary
+      end
+    fun best_score(sums, best) =       
+      case sums of
+        [] => best
+        | x::xs => 
+          let
+            val current = get_score_by_sum(x)
+          in
+            if current < best 
+              then best_score(xs, current) 
+            else best_score(xs, best)
+          end
+  in
+    best_score(possible_sum(cs), raw_score)
+  end
+
+
+fun officiate_challenge(cards, moves, goal) =
+  let
+    fun run(_, [], held_cards) = 
+        score_challenge (held_cards, goal)
+
+      | run([], Draw::_, held_cards) =
+         score_challenge (held_cards, goal)
+
+      | run(c::cs, Draw::moves, held_cards) =
+        (case c of
+          (_, Ace) => 
+            if sum_cards held_cards + 1 > goal
+              then score_challenge(c::held_cards, goal)
+            else
+              run(cs, moves,  c::held_cards)
+
+          | c' =>
+            if sum_cards held_cards + card_value c' > goal
+              then score_challenge(c'::held_cards, goal)
+            else
+              run(cs, moves,  c'::held_cards)
+        )
+
+      | run(cards, Discard dc::moves, held_cards) =
+        run(cards, moves, remove_card(held_cards, dc, IllegalMove))
+      
+  in
+    run(cards, moves, [])
+  end
+

@@ -6,7 +6,6 @@
 
 (*use "hw2provided.sml";*)
 
-
 val test1 = all_except_option("string", ["string"]) = SOME [];
 val test1_1 = all_except_option("s1", []) = NONE;
 val test1_2 = all_except_option("s1", ["s1","s2"]) = SOME ["s2"];
@@ -154,3 +153,44 @@ val test13 = ((officiate([(Clubs,Jack),(Spades,Num(8))],
               handle IllegalMove => true);
 
              
+val test14 = possible_sum([(Clubs, Num 2),(Spades, Num 4)]) = [6];
+val test14_2 = possible_sum([(Spades, Num 5),(Clubs, Num 5)]) = [10];
+val test14_3 = possible_sum([(Spades, Ace),(Clubs, Num 5)]) = [6,16];
+val test14_4 = possible_sum([(Hearts, Ace),(Clubs, Num 7)]) = [8,18];
+val test14_5 = possible_sum([(Hearts, Ace),(Hearts, Ace),(Hearts, Num 5)]) = [7,17,27];
+val test14_6 = possible_sum([(Hearts, Ace),(Hearts, Ace),(Hearts, Ace)]) = [3,13,23,33];
+
+
+val test15 = score_challenge([(Clubs, Num 2),(Spades, Num 4)],10) = 2;
+val test15_2 = score_challenge([(Spades, Num 5),(Clubs, Num 5)],10) = 0;
+val test15_3 = score_challenge([(Hearts, Num 8),(Diamonds, Num 4)],10) = 3;
+val test15_4 = score_challenge([(Hearts, Num 4),(Hearts, Num 4)],4) = 6;
+val test15_5 = score_challenge([(Hearts, Num 2),(Hearts, Num 4),(Hearts, Num 3)],10) = 0;
+val test15_6 = score_challenge([(Diamonds, Num 2),(Diamonds, Num 4)],10) = 2;
+val test15_7 = score_challenge([(Spades, Num 4),(Hearts, Num 4),(Hearts, Num 4)],10) = 6;
+val test15_8 = score_challenge([(Hearts, Num 2),(Hearts, Num 4),(Hearts, Num 2)],10) = 1;
+
+val test15_9 = score_challenge([(Hearts, Ace),(Hearts, Num 4),(Hearts, Num 3)],8) = 0;
+val test15_10 = score_challenge([(Diamonds, Ace),(Diamonds, Num 4)],5) = 0;
+val test15_11 = score_challenge([(Spades, Ace),(Hearts, Num 4),(Hearts, Num 4)],19) = 0;
+val test15_12 = score_challenge([(Spades, Ace),(Hearts, Num 4),(Hearts, Num 4)],11) = 2;
+val test15_13 = score_challenge([(Hearts, Ace),(Hearts, Num 4),(Hearts, Num 4)],11) = 1;
+val test15_14 = score_challenge([(Hearts, Ace),(Hearts, Ace),(Clubs, Num 2)],30) = 6;
+val test15_15 = score_challenge([(Hearts, Ace),(Hearts, Ace),(Clubs, Num 2)],15) = 1;
+val test15_16 = score_challenge([(Hearts, Ace),(Hearts, Ace),(Clubs, Num 2)],6) = 2;
+
+val test16 = officiate_challenge([(Hearts, Num 2),(Clubs, Num 4)],[Draw], 15) = 6;
+val test16_2 = officiate_challenge([(Hearts, Num 2),(Clubs, Num 4)],[Draw, Discard(Hearts, Num 2)], 15) = 7;
+val test16_3 = officiate_challenge([(Hearts, Num 2),(Clubs, Num 2),(Hearts, Num 2),(Clubs, Num 2)],[Draw, Draw, Draw, Discard(Clubs, Num 2)], 15) = 5;
+val test16_4 = officiate_challenge([(Hearts, Num 5),(Clubs, Num 4)],[Draw], 15) = 5;
+val test16_5 = officiate_challenge([(Hearts, Num 3),(Clubs, Num 2),(Clubs, Num 3),(Clubs, Num 3)],[Draw, Draw], 15) = 10;
+val test16_6 = officiate_challenge([(Hearts, Ace),(Hearts, Num 4),(Clubs, Num 4)],[Draw,Draw], 15) = 0;
+
+val test16_7 = officiate_challenge([(Hearts, Ace),(Hearts, Num 4),(Clubs, Num 4)],[Draw,Draw], 5) = 0;
+val test16_8 = officiate_challenge([(Hearts, Ace),(Hearts, Num 4),(Clubs, Num 4)],[Draw,Draw], 7) = 1;
+val test16_9 = officiate_challenge([(Hearts, Ace),(Hearts, Num 4),(Clubs, Num 4)],[Draw,Draw], 17) = 1;
+
+val test16_10 = officiate_challenge([(Hearts, Ace),(Clubs, Ace),(Clubs, Num 4)],[Draw,Draw], 5) = 3;
+val test16_11 = officiate_challenge([(Hearts, Ace),(Clubs, Ace),(Clubs, Num 4)],[Draw,Draw], 17) = 5;
+val test16_12 = officiate_challenge([(Hearts, Ace),(Clubs, Ace),(Clubs, Num 4)],[Draw,Draw], 21) = 3;
+val test16_13 = officiate_challenge([(Hearts, Ace),(Hearts, Ace),(Clubs, Num 4)],[Draw,Draw], 14) = 1;
