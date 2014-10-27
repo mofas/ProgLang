@@ -4,9 +4,8 @@
 (* All the tests should evaluate to true. For example, the REPL should say: val test1 = true : bool *)
 
 
-use "hw3provided.sml";
+(*use "hw3provided.sml";*)
 
-(*
 val test1 = only_capitals ["A","B","C"] = ["A","B","C"];
 val test1_2 = only_capitals ["A","b","C"] = ["A","C"];
 val test1_3 = only_capitals ["A","b","c"] = ["A"];
@@ -22,13 +21,13 @@ val test2_6 = longest_string1 [] = "";
 val test2_7 = longest_string1 ["","","C"] = "C"
 
 val test3 = longest_string2 ["A","bc","C"] = "bc"
-val test3 = longest_string2 ["A","bc","C"] = "bc";
-val test3_2 = longest_string2 ["Ab","bc","C"] = "bc";
-val test3_3 = longest_string2 ["A","bc","Cde"] = "Cde";
-val test3_4 = longest_string2 ["A","b","C"] = "C";
-val test3_5 = longest_string2 ["Abc","bcde","efghij"] = "efghij";
-val test3_6 = longest_string2 [] = "";
-val test3_7 = longest_string2 ["","","C"] = "C"
+val test3_2 = longest_string2 ["A","bc","C"] = "bc";
+val test3_3 = longest_string2 ["Ab","bc","C"] = "bc";
+val test3_4 = longest_string2 ["A","bc","Cde"] = "Cde";
+val test3_5 = longest_string2 ["A","b","C"] = "C";
+val test3_6 = longest_string2 ["Abc","bcde","efghij"] = "efghij";
+val test3_7 = longest_string2 [] = "";
+val test3_8 = longest_string2 ["","","C"] = "C"
 
 val test4a= longest_string3 ["A","bc","C"] = "bc"
 val test4a_2 = longest_string3 ["Ab","bc","C"] = "Ab";
@@ -110,16 +109,69 @@ val test9b_5_2 = count_wild_and_variable_lengths (ConstructorP("a", Variable("aa
 val test9b_5_3 = count_wild_and_variable_lengths (TupleP [Wildcard, ConstructorP("a", Wildcard)]) = 2;
 val test9b_5_4 = count_wild_and_variable_lengths (TupleP [Variable("a"), Variable("bb")]) = 3;
 val test9b_5_5 = count_wild_and_variable_lengths (TupleP [Variable("aa"),TupleP [Variable("bb")]]) = 4;
-*)
 
-
-(*
 val test9c = count_some_var ("x", Variable("x")) = 1;
+val test9c_2 = count_some_var ("x", Variable("a")) = 0;
+val test9c_3 = count_some_var ("a", Variable("x")) = 0;
 
-val test10 = check_pat (Variable("x")) = true
+val test9c_4 = count_some_var ("a", ConstructorP("a", Variable("a"))) = 1;
+val test9c_5 = count_some_var ("a", TupleP [Variable("a"),TupleP [Variable("b")]]) = 1;
+val test9c_6 = count_some_var ("a", TupleP [Variable("a"),TupleP [Variable("a")]]) = 2;
+val test9c_7 = count_some_var ("a", ConstructorP("a", TupleP [Wildcard, ConstructorP("a", Wildcard)])) = 0;
+val test9c_8 = count_some_var ("a", ConstructorP("a", TupleP [Variable("a"), ConstructorP("a", Variable("b"))])) = 1;
+val test9c_9 = count_some_var ("a", ConstructorP("a", TupleP [Variable("a"), ConstructorP("a", Variable("a"))])) = 2;
 
-val test11 = match (Const(1), UnitP) = NONE
+val pre_test10_1 = all_variable (Variable("x")) = ["x"];
+val pre_test10_1_2 = all_variable (UnitP) = [];
+val pre_test10_1_3 = all_variable (Wildcard) = [];
+val pre_test10_1_4 = all_variable (ConstP(1)) = [];
+val pre_test10_1_5 = all_variable (ConstructorP("a", Variable("a"))) = ["a"];
+val pre_test10_1_6 = all_variable (TupleP [Variable("a"),TupleP [Variable("b")]]) = ["a", "b"];
+val pre_test10_1_7 = all_variable (ConstructorP("a", TupleP [Variable("a"), ConstructorP("a", Variable("a"))])) = ["a","a"];
+val pre_test10_1_8 = all_variable (ConstructorP("a", TupleP [Variable("a"), ConstructorP("a", Variable("b"))])) = ["a","b"];
+val pre_test10_1_9 = all_variable (TupleP [Variable("a"), Variable("b"), Variable("c")]) = ["a","b","c"];
 
-val test12 = first_match Unit [UnitP] = SOME []
+val pre_test10_2 = is_dist ["x"] = true;
+val pre_test10_2_2 = is_dist ["x", "x"] = false;
+val pre_test10_2_3 = is_dist ["x","y"] = true;
+val pre_test10_2_4 = is_dist ["x","y","z"] = true;
+val pre_test10_2_5 = is_dist ["x","y","x"] = false;
+val pre_test10_2_6 = is_dist ["x","y","z","z"] = false;
 
-*)
+val test10 = check_pat (Variable("x")) = true;
+val test10_1_2 = check_pat (UnitP) = true;
+val test10_1_3 = check_pat (Wildcard) = true;
+val test10_1_4 = check_pat (ConstP(1)) = true;
+val test10_1_5 = check_pat (ConstructorP("a", Variable("a"))) = true;
+val test10_1_6 = check_pat (TupleP [Variable("a"),TupleP [Variable("b")]]) = true;
+val test10_1_7 = check_pat (ConstructorP("a", TupleP [Variable("a"), ConstructorP("a", Variable("a"))])) = false;
+val test10_1_8 = check_pat (ConstructorP("a", TupleP [Variable("a"), ConstructorP("a", Variable("b"))])) = true;
+val test10_1_9 = check_pat (TupleP [Variable("a"), Variable("b"), Variable("c")]) = true;
+val test10_1_10 = check_pat (TupleP [Variable("a"), Variable("b"), Variable("a")]) = false;
+
+
+val test11 = match (Const(1), UnitP) = NONE;
+val test11_2 = match (Const(1), ConstP(1)) = SOME[];
+val test11_3 = match (Unit, UnitP) = SOME[];
+val test11_4 = match (Tuple[Unit,Const(1)], TupleP[UnitP,ConstP(1)]) = SOME[];
+val test11_5 = match (Const(1), Wildcard) = SOME[];
+val test11_6 = match (Const(1), ConstructorP("a", Wildcard)) = NONE;
+val test11_7 = match (Constructor("a", Unit), ConstructorP("a", Wildcard)) = SOME[];
+val test11_8 = match (Constructor("b", Unit), ConstructorP("a", Wildcard)) = NONE;
+val test11_9 = match (Constructor("a", Const(1)), ConstructorP("a", Wildcard)) = SOME[];
+val test11_10 = match (Constructor("a", Tuple[Unit,Const(1)]), ConstructorP("a", TupleP[UnitP,ConstP(1)])) = SOME[];
+val test11_11 = match (Constructor("a", Tuple[Unit,Const(1)]), ConstructorP("a", TupleP[UnitP,ConstP(2)])) = NONE;
+
+val test11_12 = match (Const 1, Variable "x") = SOME [("x", Const 1)];
+val test11_13 = match (Tuple [Unit, Unit], Variable "x") = SOME[("x", Tuple [Unit, Unit])];
+val test11_14 = match (Constructor("y", Const 1), Variable "x") = SOME[("x", Constructor("y", Const 1))];
+val test11_15 = match (Const 1, Variable "y") = SOME [("y", Const 1)];
+val test11_16 = match (Unit, Variable "z") = SOME [("z", Unit)];
+
+
+val test12 = first_match Unit [UnitP] = SOME [];
+val test12_2 = first_match (Const 1) [ConstP 1] = SOME [];
+val test12_3 = first_match (Const 1) [Variable "a"] = SOME [("a", Const 1)];
+val test12_4 = first_match Unit [Variable "a", Variable "b"] = SOME [("a", Unit)];
+val test12_5 = first_match (Const 5) [Variable "a", Variable "b",Variable "c"] = SOME [("a", Const 5)];
+
